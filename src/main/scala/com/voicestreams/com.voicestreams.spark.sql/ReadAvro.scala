@@ -1,6 +1,4 @@
-package com.voicestreams.wordcount
-
-package com.voicestreams.app
+package com.voicestreams.spark.sql
 
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.{SparkConf, SparkContext}
