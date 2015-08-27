@@ -1,9 +1,13 @@
 package com.voicestreams.spark.sql
 
+import com.databricks.spark.avro.AvroSaver
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.{SparkConf, SparkContext}
+import com.databricks.spark.avro._
 
 object ReadAvro extends App {
+
+  case class Book(title: String, age: Int)
 
   val sparkConf = new SparkConf().setAppName("Avro Reader Job")
     .setMaster("local[4]")
@@ -12,12 +16,17 @@ object ReadAvro extends App {
   val sqlContext = new SQLContext(sc)
   val df = sqlContext.load("src/main/resources/episodes.avro", "com.databricks.spark.avro")
 
+
+  val rdd = df.map(x => Book(x(0).asInstanceOf[String], x(2).asInstanceOf[Int]))
+  rdd.foreach(println)
+
   df.registerTempTable("lines")
 
   for(column <- df.columns) {
     println(column)
   }
 
-  sqlContext.sql("select title, doctor from lines where doctor > 5 order by doctor asc limit 5").show(5)
+  val dfFinal = sqlContext.sql("select title,doctor from lines where doctor > 5 order by doctor asc limit 5")
+  df.saveAsAvroFile("saved")
 }
 
