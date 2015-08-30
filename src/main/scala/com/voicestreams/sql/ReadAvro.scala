@@ -1,9 +1,8 @@
 package com.voicestreams.spark.sql
 
-import com.databricks.spark.avro.AvroSaver
+import com.databricks.spark.avro._
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.{SparkConf, SparkContext}
-import com.databricks.spark.avro._
 
 object ReadAvro extends App {
 
